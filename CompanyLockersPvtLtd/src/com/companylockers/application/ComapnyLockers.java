@@ -1,8 +1,10 @@
 package com.companylockers.application;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.companylockers.exceptions.FileCreationException;
 import com.companylockers.exceptions.NoFileListException;
 import com.companylockers.util.FileHandlingUtil;
 
@@ -10,7 +12,7 @@ import com.companylockers.util.FileHandlingUtil;
  * 
  * @author Anupkumar Seth
  * @version 1.0
- * @since 2021-08-08 
+ * @since 2021-08-08
  *
  */
 public class ComapnyLockers {
@@ -20,31 +22,31 @@ public class ComapnyLockers {
 		final Scanner sc = new Scanner(System.in);
 		String option = "";
 		boolean closeApplication = false;
-		String path= "./Files";
-		
+		final String path = "./Files";
+
 		try {
 
-			//Display welcome header with company name and Developer name
+			// Display welcome header with company name and Developer name
 			getWelcomeHeader();
 
 			do {
 
 				try {
-					//Display the main menu for the app
+					// Display the main menu for the app
 					displaySuperMenuOptions();
 
 					if (sc.hasNext()) {
 						option = sc.nextLine().trim();
 					}
 
-					//Perform operation based on inputs received.
+					// Perform operation based on inputs received.
 					switch (Integer.parseInt(option)) {
 					case 1:
 						getFileNames(path);
 						break;
 
 					case 2:
-						performCoreOperations(sc);
+						performCoreOperations(sc, path);
 						break;
 					case 3:
 						closeApplication = true;
@@ -56,9 +58,9 @@ public class ComapnyLockers {
 				} catch (NumberFormatException ex) {
 					System.out.println("Error - Please enter Valid input !!! ");
 				}
-				
+
 				// Exit the loop based on this condition, which will exit the application
-				if(closeApplication)
+				if (closeApplication)
 					break;
 
 			} while (true);
@@ -88,15 +90,15 @@ public class ComapnyLockers {
 	}
 
 	/**
-	 * Perform the core operations of the application
-	 * 1. Add file to application
-	 * 2. Delete file from application
-	 * 3. Search file in application
-	 * 4. Return to previous menu options
+	 * Perform the core operations of the application 1. Add file to application 2.
+	 * Delete file from application 3. Search file in application 4. Return to
+	 * previous menu options
+	 * 
+	 * @param path
 	 * @param Scanner
 	 */
-	private static void performCoreOperations(Scanner sc) {
-		
+	private static void performCoreOperations(Scanner sc, String path) {
+
 		boolean goBackToPreviousMenu = false;
 		String option = "";
 		boolean avoidMenuPrint = false;
@@ -105,30 +107,30 @@ public class ComapnyLockers {
 
 			try {
 
-				// This condition avoids re-printing of menu incase scanner is taking buffer inputs.
-				if(!avoidMenuPrint)
-					
-				// Display the sub menu for core operations.	
-				displaySubMenuOptions();
+				// This condition avoids re-printing of menu incase scanner is taking buffer
+				// inputs.
+				if (!avoidMenuPrint)
+
+					// Display the sub menu for core operations.
+					displaySubMenuOptions();
 
 				if (sc.hasNext()) {
-					
+
 					option = sc.nextLine().trim();
-					
-					if(option.isEmpty()) {
+
+					if (option.isEmpty()) {
 						avoidMenuPrint = true;
 						continue;
-					}else {
+					} else {
 						avoidMenuPrint = false;
 					}
 				}
 
-				
-				//Perform core operations.
+				// Perform core operations.
 				switch (Integer.parseInt(option)) {
 
 				case 1:
-					addFileToApplication();
+					addFileToApplication(sc, path);
 					break;
 				case 2:
 					deleteFileFromApplication();
@@ -156,7 +158,6 @@ public class ComapnyLockers {
 
 	}
 
-	
 	private static void searchFileInApplication() {
 		System.out.println("Searching files ...........");
 
@@ -167,8 +168,47 @@ public class ComapnyLockers {
 
 	}
 
-	private static void addFileToApplication() {
-		System.out.println("Adding files ...........");
+	/**
+	 * Utility method to add file to the given path
+	 * 
+	 * @param sc
+	 * @param path
+	 */
+	private static void addFileToApplication(Scanner sc, String path) {
+
+		List<String> contentList = new ArrayList<String>();
+		try {
+
+			//Read file name
+			System.out.println("Please enter name of the file to be created:  ");
+			String fileName = sc.nextLine();
+
+			
+			System.out.println(" Pleae enter content of the file:  -----> USE :WQ TO INDICATE EOF <------");
+
+			// Reading contents of the file unit EOF is entered by user.
+			while (sc.hasNext()) {
+
+				String str = sc.nextLine();
+
+				if (str.equalsIgnoreCase(":wq")) {
+					break;
+				}
+
+				contentList.add(str);
+			}
+
+			//calling utility method to add the fiven file and content.
+			if (FileHandlingUtil.addFile(path, fileName, contentList)) {
+				System.out.println("File Created successfully");
+			}else {
+				System.out.println("File Creation was not successfully!");
+			}
+
+		} catch (FileCreationException ex) {
+			System.out.println("Some error occured while trying to Create file. Refer to error message below...");
+			System.out.println(ex.getMessage());
+		}
 
 	}
 
@@ -184,11 +224,16 @@ public class ComapnyLockers {
 		System.out.println("Please entetr input (1,2, 3 or 4): ");
 	}
 
+	/**
+	 * Gets all the File names from the root directory
+	 * 
+	 * @param path root folder location
+	 */
 	private static void getFileNames(String path) {
-		
+
 		try {
 			List<String> sortedFileName = FileHandlingUtil.getSortedFileName(path);
-			
+
 			if (sortedFileName == null) {
 				System.out.println("Path doesnot exits!");
 			} else if (sortedFileName.isEmpty()) {
@@ -197,9 +242,9 @@ public class ComapnyLockers {
 				System.out.println("'''''' Files List ''''''!");
 				sortedFileName.forEach(System.out::println);
 			}
-			
-		}catch(NoFileListException ex) {
-			System.out.println("Some error occured while trying to get files...");
+
+		} catch (NoFileListException ex) {
+			System.out.println("Some error occured while trying to get files. Refer to error message below...");
 			System.out.println(ex.getMessage());
 		}
 	}
