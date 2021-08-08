@@ -1,6 +1,10 @@
 package com.companylockers.application;
 
+import java.util.List;
 import java.util.Scanner;
+
+import com.companylockers.exceptions.NoFileListException;
+import com.companylockers.util.FileHandlingUtil;
 
 /**
  * 
@@ -13,9 +17,11 @@ public class ComapnyLockers {
 
 	public static void main(String[] args) {
 
-		Scanner sc = new Scanner(System.in);
+		final Scanner sc = new Scanner(System.in);
 		String option = "";
 		boolean closeApplication = false;
+		String path= "./Files";
+		
 		try {
 
 			//Display welcome header with company name and Developer name
@@ -34,7 +40,7 @@ public class ComapnyLockers {
 					//Perform operation based on inputs received.
 					switch (Integer.parseInt(option)) {
 					case 1:
-						getFileNames();
+						getFileNames(path);
 						break;
 
 					case 2:
@@ -178,8 +184,24 @@ public class ComapnyLockers {
 		System.out.println("Please entetr input (1,2, 3 or 4): ");
 	}
 
-	private static void getFileNames() {
-
+	private static void getFileNames(String path) {
+		
+		try {
+			List<String> sortedFileName = FileHandlingUtil.getSortedFileName(path);
+			
+			if (sortedFileName == null) {
+				System.out.println("Path doesnot exits!");
+			} else if (sortedFileName.isEmpty()) {
+				System.out.println("Root folder is empty!");
+			} else {
+				System.out.println("'''''' Files List ''''''!");
+				sortedFileName.forEach(System.out::println);
+			}
+			
+		}catch(NoFileListException ex) {
+			System.out.println("Some error occured while trying to get files...");
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	/**
