@@ -1,4 +1,4 @@
-This is a assessment project for simplilearn course 2 which is for core java. 
+This is an assessment project for simplilearn course 2 which is for core java. 
 
 This project is a java command line projcet doing following things.
 
