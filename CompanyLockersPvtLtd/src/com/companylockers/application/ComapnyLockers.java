@@ -33,7 +33,7 @@ public class ComapnyLockers {
 
 				try {
 					// Display the main menu for the app
-					displaySuperMenuOptions();
+					displayMainMenuOptions();
 
 					if (sc.hasNext()) {
 						option = sc.nextLine().trim();
@@ -81,7 +81,7 @@ public class ComapnyLockers {
 	/**
 	 * Displays Main Menu options for application
 	 */
-	private static void displaySuperMenuOptions() {
+	private static void displayMainMenuOptions() {
 		System.out.println("----------------MAIN MENU--------------------");
 		System.out.println("1. File names in ascending order");
 		System.out.println("2. Business-level operations");
@@ -130,13 +130,13 @@ public class ComapnyLockers {
 				switch (Integer.parseInt(option)) {
 
 				case 1:
-					addFileToApplication(sc, path);
+					addFile(sc, path);
 					break;
 				case 2:
-					deleteFileFromApplication();
+					deleteFile(sc, path);
 					break;
 				case 3:
-					searchFileInApplication();
+					searchFile(sc, path);
 					break;
 				case 4:
 					goBackToPreviousMenu = true;
@@ -152,19 +152,50 @@ public class ComapnyLockers {
 
 			} catch (NumberFormatException ex) {
 				System.out.println("Error - Please enter Valid input !!! ");
+			} catch (Exception ex) {
+				System.out.println("Some error occured while trying to Create file. Refer to error message below...");
+				System.out.println(ex.getMessage());
 			}
 
 		} while (true);
 
 	}
 
-	private static void searchFileInApplication() {
-		System.out.println("Searching files ...........");
-
+	/**
+	 * Searches for the file at given path
+	 * @param sc 
+	 * @param path 
+	 */
+	private static void searchFile(Scanner sc, String path) {
+		
+		System.out.println("Pleae enter the file name to be deleted: ");
+		String fileName = sc.nextLine();
+		if(FileHandlingUtil.searchFile(path, fileName)) {
+			System.out.println(fileName + " File was found ");
+		}else {
+			System.out.println(fileName + " File was not found ");
+		}
 	}
 
-	private static void deleteFileFromApplication() {
-		System.out.println("deleting files ...........");
+	/**
+	 * Deletes the file from the given path
+	 * @param sc 
+	 * @param path string value indicating path of the file
+	 */
+	private static void deleteFile(Scanner sc, String path) {
+		
+		try {
+		
+			System.out.println("Pleae enter the file name to be deleted: ");
+			String fileName = sc.nextLine();
+			FileHandlingUtil.deleteFile(path, fileName);
+			
+		}catch(Exception ex) {
+			System.out.println("Some error occured while trying to Create file. Refer to error message below...");
+			System.out.println(ex.getMessage());
+		}
+		
+		
 
 	}
 
@@ -174,7 +205,7 @@ public class ComapnyLockers {
 	 * @param sc
 	 * @param path
 	 */
-	private static void addFileToApplication(Scanner sc, String path) {
+	private static void addFile(Scanner sc, String path) {
 
 		List<String> contentList = new ArrayList<String>();
 		try {

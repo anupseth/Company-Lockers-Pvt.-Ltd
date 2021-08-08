@@ -68,22 +68,22 @@ public class FileHandlingUtil {
 	 */
 	public static boolean addFile(String path, String fileName, List<String> content) throws FileCreationException {
 
-		FileWriter myWriter = null;
+		FileWriter fileWritter = null;
 
 		try {
 
-			File myObj = new File(path + "/" + fileName);
+			File myFile = new File(path + "/" + fileName);
 
 			// Check if file already exist. if not then create new file.
-			if (!myObj.createNewFile()) {
+			if (!myFile.createNewFile()) {
 				System.out.println("File already exists.");
 			} else {
-				myWriter = new FileWriter(myObj);
+				fileWritter = new FileWriter(myFile);
 				
 				//Read each line and write it to file
 				for (String str : content) {
-					myWriter.write(str);
-					myWriter.write("\n");
+					fileWritter.write(str);
+					fileWritter.write("\n");
 				}
 				return true;
 			}
@@ -93,9 +93,9 @@ public class FileHandlingUtil {
 		} finally {
 
 			//Close the writer 
-			if (myWriter != null) {
+			if (fileWritter != null) {
 				try {
-					myWriter.close();
+					fileWritter.close();
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
 				}
@@ -105,4 +105,64 @@ public class FileHandlingUtil {
 		return false;
 	}
 
+	
+	/**
+	 * Deletes the file with given name and at specified path 
+	 * @param path string value indicating path of the file
+	 * @param fileName type string value indicating filename
+	 */
+	public static void deleteFile(String path, String fileName) {
+		
+		
+		try {
+			
+			File myFile = new File(path + "/" + fileName);
+
+			//Check if file exist at path
+			if (myFile.exists()) {
+
+				//Delete the file
+				if (myFile.delete()) {
+					System.out.println(fileName + "  file Deleted Successfully");
+				} else {
+					System.out.println("Could not Deleted file  " + fileName);
+				}
+			} else {
+				System.out.println("FILE NOT FOUND");
+			}
+
+		}catch(Exception ex) {
+			
+			System.out.println("Some exception occured. See below error message...");
+			System.out.println(ex.getMessage());
+		}
+	}
+	
+	
+	/**
+	 * Searches for the files in given path parameter
+	 * @param path path string value indicating path of the file
+	 * @param fileName type string value indicating filename
+	 * @return
+	 */
+	public static boolean searchFile(String path, String fileName) {
+		
+		try {
+			
+			File myFile = new File(path + "/" + fileName);
+
+			//Check if file exist at path
+			if (myFile.exists()) {
+				return true;
+			}
+			
+			
+		}catch(Exception ex) {
+			
+			System.out.println("Some exception occured. See below error message...");
+			System.out.println(ex.getMessage());
+		}
+		
+		return false;
+	}
 }
