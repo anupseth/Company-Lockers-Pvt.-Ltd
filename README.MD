@@ -1,6 +1,6 @@
 This is an assessment project for simplilearn course 2 which is for core java. 
 
-This project is a java command line projcet doing following things.
+This project is a java command line project doing following things.
 
 - Retrieving the file names in an ascending order
 
@@ -16,4 +16,4 @@ This project is a java command line projcet doing following things.
 
 - Option to close the application
 
-NOTE : Inside the project there is a "Files" folder which is being used as root folder for this applications and will store the files
+NOTE : Inside the project there is a "Files" folder which is being used as root folder for this applications and will store the files. If running from excutable jar then make sure to create folder named "Files" in the current directoty.
