@@ -16,4 +16,4 @@ This project is a java command line projcet doing following things.
 
 - Option to close the application
 
-NOTE : nside project there is a Files folder which is being used as root folder for this applications and will store the files
+NOTE : Inside the project there is a "Files" folder which is being used as root folder for this applications and will store the files
