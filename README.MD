@@ -15,3 +15,5 @@ This project is a java command line projcet doing following things.
 	Navigation option to close the current execution context and return to the main context
 
 - Option to close the application
+
+NOTE : nside project there is a Files folder which is being used as root folder for this applications and will store the files
